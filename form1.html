@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Sign Up & Login</title>
+</head>
+<body class="bg-cover bg-center bg-fixed bg-blue-500">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-semibold">Welcome!</h2>
+                <p class="text-gray-500">Please sign up or log in.</p>
+            </div>
+
+            <form id="signup-login-form">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-600">Full Name</label>
+                    <input type="text" id="username" name="username" class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-600">Password</label>
+                    <input type="password" id="password" name="password" class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="confirm-password" class="block text-gray-600">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" class="w-full p-2 border rounded">
+                </div>
+                <div class="flex justify-center mt-6">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Sign Up</button>
+                </div>
+                <div class="text-center mt-4">
+                    <p class="text-gray-500">Already have an account? <a href="#" id="toggle-login" class="text-blue-500">Log In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('signup-login-form');
+    const toggleLogin = document.getElementById('toggle-login');
+    const isLoginPage = false;
+
+    toggleLogin.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (isLoginPage) {
+            // Switch to sign-up form
+            form.reset();
+            form.action = 'javascript:void(0);'; // You can set the action URL for submitting data to a server
+            toggleLogin.textContent = 'Log In';
+        } else {
+            // Switch to login form
+            form.reset();
+            form.action = 'javascript:void(0);'; // You can set the action URL for submitting data to a server
+            toggleLogin.textContent = 'Sign Up';
+        }
+        isLoginPage = !isLoginPage;
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (isLoginPage) {
+            // Handle login
+            const savedUser = JSON.parse(localStorage.getItem('user'));
+            if (savedUser && savedUser.username === username && savedUser.password === password) {
+                alert('Login successful!');
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        } else {
+            // Handle sign-up
+            const confirmPassword = document.getElementById('confirm-password').value;
+            if (password === confirmPassword) {
+                localStorage.setItem('user', JSON.stringify({ username, password }));
+                alert('Sign up successful! You can now log in.');
+                form.reset();
+                toggleLogin.click(); // Switch to the login form
+            } else {
+                alert('Passwords do not match. Please try again.');
+            }
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
